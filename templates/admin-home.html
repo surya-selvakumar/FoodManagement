@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="h-[90vh] w-full bg-[#E3E3E1] relative">
+
+        <div class="z-20 text-white absolute top-[50%] translate-y-[-50%] left-[5%] w-[70%]">
+            <h1 class="font-bold text-[80px]  leading-[85px]">Welcome
+                 <span class="text-green-400">{{name}}</span></h1>
+            <h3 class="text-3xl mt-6 font-semibold">Manage the Restaurants and NGOs on your site</h3>
+            <!-- <p class="text-md mt-6 text-white font-semibold w-[60%]">Donate extra food and help the needy people around your city. Tie up with NGOs and Ashrams to contribute to the well-being and upliftment of the underprivileged people around you.</p> -->
+
+            <button onclick="window.location.href='/admin-dashboard'" class="w-[130px] bg-green-500 text-white rounded-md p-2  cursor-pointer border-[1px] border-transparent hover:bg-green-700 mt-8">Manage</button>
+            <!-- <div class="flex w-[280px] justify-between mt-8 font-semibold">
+                <button class="w-[130px] bg-rose-500 text-white rounded-md p-2  cursor-pointer border-[1px] border-transparent hover:bg-transparent hover:border-[1px] hover:border-rose-500 hover:text-rose-400">Shop Women</button>
+                
+            </div> -->
+        </div>
+
+        <img class="absolute top-0 left-0 h-full w-full object-cover brightness-[0.5]" src="../static/assets/home-bg.jpg" alt="">
+
+    </div>
+{% endblock %}

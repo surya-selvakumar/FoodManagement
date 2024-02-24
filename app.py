@@ -5,10 +5,19 @@ import utils
 
 app = Flask(__name__)
 
+userRole=""
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
+@app.route('/ngo-home')
+def ngo_home():
+    return render_template('ngo-home.html')
+
+@app.route('/admin-home')
+def admin_home():
+    return render_template('admin-home.html')
+
+@app.route('/restaurant-home')
+def restaurant_home():
+    return render_template('restaurant-home.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -21,7 +30,16 @@ def login():
         role = request.form['role']
         
         if utils.authenticate(role, email, password):
-            return redirect(url_for('home', name=name))
+            userRole=role
+            # Get user name in 'name'
+            name=""
+            if(role=='Restaurant Owner'):
+                return render_template('restaurant-home.html',name=name,role=userRole)
+            elif(role=="Asharam/NGO personnel"):
+                return render_template('ngo-home.html',name=name,role=userRole)
+            else:
+                return render_template('admin-home.html',name=name,role=userRole)
+
         
     return render_template('login.html')
 
@@ -36,7 +54,7 @@ def adminRegister():
 
         utils.save_data(role, email, password)
 
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     
     return render_template('admin-register.html')
 
@@ -58,7 +76,7 @@ def restaurantRegister():
 
         print('user'+email+ "password" +password +'confirmPassword' )
 
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     
     return render_template('restaurant-register.html')
 
@@ -82,7 +100,7 @@ def ngoRegister():
         utils.save_data(role, email, password, organization_name, address, people, certification, description)
         
 
-        return render_template('home.html', name=name)
+        return redirect(url_for('login'))
     
     return render_template('ngo-register.html')
 

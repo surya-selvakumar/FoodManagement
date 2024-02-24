@@ -6,10 +6,23 @@
     <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial user role when the page loads
+            localStorage.setItem('userRole', document.querySelector('[name="role"]').value);
+            
+            // Update user role in localStorage when the dropdown changes
+            document.querySelector('[name="role"]').addEventListener('change', (event) => {
+                localStorage.setItem('userRole', event.target.value);
+            });
+        });
+    </script>
 </head>
 <body>
     
-    <div class="register-page">
+    <div class="register-page h-[100vh]">
 
         <form class="register-container" method="post">
 
