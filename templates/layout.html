@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Flask App{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="h-[10vh] shadow-md flex p-2 px-6 justify-between items-center">
+        <div class="text-xl font-semibold text-green-500 ">Food Management</div>
+        <ul class="flex justify-around w-[70%]">
+            <li><a href="{{ url_for('donation') }}">Donation</a></li>
+            <li><a href="{{ url_for('donationHistory') }}">History</a></li>
+            <li><a href="{{ url_for('ngoList') }}">NGOS</a></li>
+            <li><a href="{{ url_for('ngoDashboard') }}">NGO-dashboard</a></li>
+            <li><a href="{{ url_for('ngoDonationsHistory') }}">NGO-donation-history</a></li>
+            <li><a href="{{ url_for('suppliersList') }}">Suppliers</a></li>
+            <li><a href="{{ url_for('adminDashboard') }}">adminDashboard</a></li>
+            <!-- <li><a href="{{ url_for('home') }}">Profile</a></li> -->
+            
+           
+            <li><a href="{{ url_for('restaurantRegister') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="w-full flex bg-[#E3E3E1] min-h-[100vh] relative px-20 py-4">
+        <div class="container mx-auto z-50 w-1/2">
+            {% if ngos_data|length > 0 %}
+                <h1 class="font-bold my-4 text-xl">
+                    Registered NGOs
+                </h1>
+                <ul class="list-none p-0 z-50 max-h-[75vh] overflow-y-scroll pr-10">
+                    {% for index in range(length) %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+                            <!-- Placeholder for Image or Logo -->
+                            <div class="w-1/3 float-left p-6">
+                                <img src="{{ ngos_data[index]['ngo_logo'] }}" alt="NGO Logo" class="w-full h-auto">
+                            </div>
+                            <!-- NGO Details -->
+                            <div class="w-2/3 float-right p-4 flex flex-col gap-y-2">
+                                <h2 class="text-lg font-bold">NGO: {{ ngos_data[index]['ngo_name'] }}</h2>
+                                <p><strong>Location:</strong> {{ ngos_data[index]['location'] }}</p>
+                                <p><strong>Date Registered:</strong> {{ ngos_data[index]['date_registered'] }}</p>
+                                <p><strong>Number of People:</strong> {{ ngos_data[index]['people_in_ngo'] }}</p>
+                                <p>{{ ngos_data[index]['ngo_description'] }}</p>
+                                <button onclick="showInfo('{{ loop.index }}')" class="more-info-button bg-blue-400 rounded-lg px-4 py-1 text-white border-none hover:bg-blue-600 w-fit">More Info</button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-xl font-semibold">No NGOs data present currently.</p>
+            {% endif %}
+        </div>
+        <div class="w-1/2 p-8" id="more-info-container">
+            <!-- Detail of single NGO will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        var ngosData = '{{ ngos_data | tojson | safe }}';
+        const ngos = JSON.parse(ngosData);
+        console.log(ngos);
+
+        function showInfo(index) {
+            const ngoData = ngos[index - 1];
+            var moreInfoContainer = document.getElementById('more-info-container');
+            moreInfoContainer.innerHTML = `
+            <div class="max-w-md mx-auto p-4">
+                <div class="flex items-center gap-4">
+                    <img src="${ngoData.ngo_logo}" alt="NGO Logo" class="h-12 w-12">
+                    <h2 class="text-2xl font-bold mb-4">${ngoData.ngo_name}</h2>
+                </div>
+                <div class="flex flex-col gap-y-2 flex-wrap mb-4 mt-4">
+                    <p class="mt-1"><strong>NGO Description:</strong> ${ngoData.ngo_description}</p>
+                    <p class="mt-4"><strong>Location:</strong> ${ngoData.location}</p>
+                    <p><strong>Phone Number:</strong> ${ngoData.phone}</p>
+                    <p><strong>Date Registered:</strong> ${ngoData.date_registered}</p>
+                    <p><strong>Number of People:</strong> ${ngoData.people_in_ngo}</p>
+                   
+                </div>
+            </div>
+        `;
+        }
+    </script>
+{% endblock %}

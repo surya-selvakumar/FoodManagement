@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    
+    <div class="register-page">
+
+        <form class="register-container" method="post">
+
+
+            <h2>Log In</h2>
+            <p>Don't have an account? <a href="/restaurant-register">Register Here.</a> </p>
+
+            <div class="saperator-box">
+                <div></div>
+                <span >OR</span>
+                <div></div>
+            </div>
+
+            <div class="form-component">
+                <label for="">Your Email</label>
+                <input type="text" name="email">
+            </div>
+            <div class='form-component'>
+                <label htmlFor='' class=''>
+                    You Are 
+                </label>
+                <select
+                    class='w-full outline-none rounded-xl border-gray-500 border-2'
+                    required
+                    name="role"
+                >
+                    <option value='Restaurant Owner'>Restaurant Owner</option>
+                    <option value='Asharam/NGO personnel'>Asharam/NGO personnel</option>
+                    <option value='Admin'>Admin</option>
+                </select>
+            </div>
+            <div class="form-component">
+                <label for="">Your Password</label>
+                <input type="password" name="password">
+            </div>
+        
+
+            <button class="mt-8" type="submit">Log In</button>
+        </form>
+
+        <div class="right-content">
+            <h3 class="text-[20px] font-semibold">Welcome To</h3>
+            <h1 class="text-[60px] leading-[65px] font-bold">
+                Food-Waste Management
+            </h1>
+        </div>
+
+    </div>
+
+</body>
+</html>
