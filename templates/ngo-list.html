@@ -16,11 +16,11 @@
                             </div>
                             <!-- NGO Details -->
                             <div class="w-2/3 float-right p-4 flex flex-col gap-y-2">
-                                <h2 class="text-lg font-bold">NGO: {{ ngos_data[index]['ngo_name'] }}</h2>
-                                <p><strong>Location:</strong> {{ ngos_data[index]['location'] }}</p>
-                                <p><strong>Date Registered:</strong> {{ ngos_data[index]['date_registered'] }}</p>
-                                <p><strong>Number of People:</strong> {{ ngos_data[index]['people_in_ngo'] }}</p>
-                                <p>{{ ngos_data[index]['ngo_description'] }}</p>
+                                <h2 class="text-lg font-bold">NGO: {{ ngos_data[index]['organization_name'] }}</h2>
+                                <p><strong>Location:</strong> {{ ngos_data[index]['address'] }}</p>
+                                <p><strong>Date Registered:</strong> {{ ngos_data[index]['date'] }}</p>
+                                <p><strong>Number of People:</strong> {{ ngos_data[index]['people'] }}</p>
+                                <p>{{ ngos_data[index]['description'] }}</p>
                                 <button onclick="showInfo('{{ loop.index }}')" class="more-info-button bg-blue-400 rounded-lg px-4 py-1 text-white border-none hover:bg-blue-600 w-fit">More Info</button>
                             </div>
                             <div class="clearfix"></div>

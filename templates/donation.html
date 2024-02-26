@@ -13,12 +13,12 @@
                         <!-- Placeholder for Image or Logo -->
                         <div class="w-1/3 float-left p-6">
                
-                            <img src="{{ donation['img'] | default('../static/assets/food.jpg') }}" alt="Donation Image" class="w-full h-auto">
+                            <img src="{{ donation['mealImage'] | default('../static/assets/food.jpg') }}" alt="Donation Image" class="w-full h-auto">
                         </div>
                         <!-- Donation Details -->
                         <div class="w-2/3 float-right p-4">
-                            <h2 class="text-lg font-bold">{{ donation['name'] }}</h2>
-                            <p><strong>Quantity:</strong> {{ donation['quantity'] }}</p>
+                            <h2 class="text-lg font-bold">{{ donation['mealName'] }}</h2>
+                            <p><strong>Quantity:</strong> {{ donation['mealQuantity'] }}</p>
                             <p><strong>Date:</strong> {{ donation['date'] }}</p>
                             <p><strong>Time:</strong> {{ donation['time'] }}</p>
                             <p><strong>Status:</strong> {{ donation['status'] }}</p>
@@ -34,7 +34,7 @@
         <div class="w-1/2 p-8">
             <h1 class="font-bold text-2xl mb-4">Create a Donation:</h1>
 
-            <form action="" class="space-y-4">
+            <form class="space-y-4" method="post" enctype="multipart/form-data">
                 <div>
                     <label for="mealName" class="block text-sm font-medium text-gray-700">Meal Name:</label>
                     <input type="text" id="mealName" name="mealName" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
@@ -76,6 +76,8 @@
                     <label for="mealDescription" class="block text-sm font-medium text-gray-700">Donation Address:</label>
                     <textarea id="donationAddress" name="donationAddress" rows="3" class="mt-1 p-2 w-full border border-gray-300 rounded-md"></textarea>
                 </div>
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
                 <div class="flex justify-between items-center">
                     <button type="button" onclick="getLocation()" class="bg-blue-500 text-white p-2 rounded-md">Get My Location</button>
                     <button type="submit"  class="bg-green-500 text-white p-2 rounded-md">Submit Donation</button>
@@ -94,6 +96,8 @@
         }
 
         function showPosition(position) {
+            document.getElementById('latitude').value = position.coords.latitude;
+            document.getElementById('longitude').value = position.coords.longitude;
             alert("Latitude: " + position.coords.latitude + "\nLongitude: " + position.coords.longitude);
         }
     </script>

@@ -17,10 +17,10 @@
                             <!-- Supplier Details -->
                             <div class="w-2/3 float-right p-4 flex flex-col gap-y-2">
                                 <h2 class="text-lg font-bold">Supplier: {{ suppliers_data[index]['name'] }}</h2>
-                                <p><strong>Restaurant Name:</strong> {{ suppliers_data[index]['restaurant_name'] }}</p>
-                                <p><strong>Date:</strong> {{ suppliers_data[index]['date'] }}</p>
-                                <p><strong>Time:</strong> {{ suppliers_data[index]['time'] }}</p>
-                                <p><strong>People:</strong> {{ suppliers_data[index]['people'] }}</p>
+                                <p><strong>Restaurant Name:</strong> {{ suppliers_data[index]['rname'] }}</p>
+                                <p><strong>Address:</strong> {{ suppliers_data[index]['raddress'] }}</p>
+                                <p><strong>License:</strong> {{ suppliers_data[index]['rlicense'] }}</p>
+                                <p><strong>Date Added:</strong> {{ suppliers_data[index]['date'] }}</p>
                                 <button onclick="showInfo('{{ loop.index }}')" class="more-info-button bg-blue-400 rounded-lg px-4 py-1 text-white border-none hover:bg-blue-600 w-fit">More Info</button>
                             </div>
                             <div class="clearfix"></div>

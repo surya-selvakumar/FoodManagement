@@ -2,9 +2,11 @@ from flask import Flask, render_template,request,jsonify,redirect,url_for
 import os
 import random
 import utils
+from datetime import datetime
 
 app = Flask(__name__)
 
+curr_date = datetime.now().strftime("%d-%m-%Y")
 userRole=""
 
 @app.route('/ngo-home')
@@ -22,9 +24,11 @@ def restaurant_home():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-  
+    
     if request.method == 'POST':
-        name = "name"#request.form['name']
+        global role
+
+        name = "name"
         email = request.form['email']
         password = request.form['password']
         role = request.form['role']
@@ -52,7 +56,7 @@ def adminRegister():
         password = request.form['password']
         # confirmPassword = request.form['confirm-password']
 
-        utils.save_data(role, email, password)
+        utils.save_login_data(role, email, password)
 
         return redirect(url_for('login'))
     
@@ -72,7 +76,15 @@ def restaurantRegister():
 
 
 
-        utils.save_data(role, email, password, name, rname, raddress, rlicense)
+        utils.save_login_data(role, email, password)
+
+        details = {
+            "name": name, "email": email, "rname": rname, "raddress": raddress, "rlicense": rlicense, "date": curr_date
+        }
+
+        print(f"**************{role}*************")
+
+        utils.save_details(role, details)
 
         print('user'+email+ "password" +password +'confirmPassword' )
 
@@ -97,25 +109,76 @@ def ngoRegister():
         certification = request.form['certification']
         description = request.form['description']
 
-        utils.save_data(role, email, password, organization_name, address, people, certification, description)
+        utils.save_login_data(role, email, password)
+
+
+        details = {
+             "date":curr_date, "registered_name":name, "organization_name": organization_name, "address":address, "people":people, "certification":certification, "description":description
+        }
+
+        utils.save_details(role, details)
         
 
         return redirect(url_for('login'))
+    
     
     return render_template('ngo-register.html')
 
 
   
-@app.route('/donation')
+@app.route('/donation', methods=['GET', 'POST'])
 def donation():
     donation_data = utils.getTodaysDonation()
+
+    if request.method == 'POST':
+        mealName = request.form['mealName']
+        mealQuantity = request.form['mealQuantity']
+        mealImage = request.files['mealImage']
+        mealPackaging = request.form['mealPackaging']
+        mealExpiry = request.form['mealExpiry']
+        donationReason = request.form['donationReason']
+        mealDescription = request.form['mealDescription']
+        donationAddress = request.form['donationAddress']
+        latitude = request.form['latitude']
+        longitude = request.form['longitude']
+
+        if mealImage:
+            save_path = os.path.join('./static/assets', mealImage.filename)
+            mealImage.save(save_path)
+
+        curr_date = datetime.now().strftime("%d-%m-%Y")
+        curr_time = datetime.now().strftime("%H-%M-%S")
+
+        donation_data = {
+            "role": role,
+            "taker_name": "",
+            "mealName": mealName,
+            "mealQuantity": mealQuantity,
+            "mealImage": save_path,
+            "mealPackaging": mealPackaging,
+            "mealExpiry" : mealExpiry,
+            "donationReason": donationReason, 
+            "mealDescription": mealDescription,
+            "donationAddress": donationAddress,
+            "latitude": latitude,
+            "longitude": longitude,
+            "date": curr_date,
+            "time": curr_time,
+            "status": "Pending"
+        }   
+
+        utils.save_details(role, donation_data, donation=True)
+
+
     return render_template('donation.html',donation_data=donation_data)
 
 
 
 @app.route('/donation-history')
 def donationHistory():
+
     history_data = utils.getHistoryData()
+
     return render_template('donation-history.html',history_data=history_data)
 
 
@@ -153,7 +216,9 @@ def suppliersList():
 @app.route("/admin-dashboard")
 def adminDashboard():
     donations = utils.getAdminDonations()
-    length = len(donations)
+    length = 0
+    if donations:
+        length = len(donations)
     return render_template('admin-dashboard.html',donations=donations,length=length)
 
 

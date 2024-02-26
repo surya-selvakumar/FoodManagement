@@ -12,12 +12,12 @@
                         <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
                             <!-- Placeholder for Image or Logo -->
                             <div class="w-1/3 float-left p-6">
-                                <img src="{{ donations[index]['img'] | default('../static/assets/food.jpg') }}" alt="Donation Image" class="w-full h-auto">
+                                <img src="{{ donations[index]['mealImage'] | default('../static/assets/food.jpg') }}" alt="Donation Image" class="w-full h-auto">
                             </div>
                             <!-- Donation Details -->
                             <div class="w-2/3 float-right p-4 flex flex-col gap-y-2">
-                                <h2 class="text-lg font-bold">Donation From : <span class="text-lg font-[400]">{{ donations[index]['donation_from'] }}</span> </h2>
-                                <p><strong>Quantity:</strong> {{ donations[index]['quantity'] }}</p>
+                                <h2 class="text-lg font-bold">Donation From : <span class="text-lg font-[400]">{{ donations[index]['taker_name'] }}</span> </h2>
+                                <p><strong>Quantity:</strong> {{ donations[index]['mealQuantity'] }}</p>
                                 <p><strong>Date:</strong> {{ donations[index]['date'] }}</p>
                                 <p><strong>Time:</strong> {{ donations[index]['time'] }}</p>
                                 <p><strong>Status:</strong> {{ donations[index]['status'] }}</p>
