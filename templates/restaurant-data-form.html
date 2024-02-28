@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="w-full flex bg-[#E3E3E1] relative justify-center min-h-[90vh]">
+        
+        <div class="w-1/2 p-8">
+            <h1 class="font-bold text-2xl mb-4">Enter Data:</h1>
+
+            <form class="space-y-4" method="post" enctype="multipart/form-data">
+                <div>
+                    <label for="mealName" class="block text-sm font-medium text-gray-700">Value 1:</label>
+                    <input type="text" id="value1" name="value1" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="value2" class="block text-sm font-medium text-gray-700">Value 2:</label>
+                    <input type="number" id="value2" name="value2" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="value3" class="block text-sm font-medium text-gray-700">Value 3:</label>
+                    <input type="text" id="value3" name="value3" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                </div>
+                
+                <div>
+                    <label for="value4" class="block text-sm font-medium text-gray-700">VALUE 4:</label>
+                    <input type="text" id="value4" name="value4" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+                </div>
+                
+                
+                <div class="flex justify-between items-center mt-4">
+                   
+                    <button type="submit"  class="mt-4 px-6 bg-green-500 text-white p-2 rounded-md">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        
+    </script>
+{% endblock %}

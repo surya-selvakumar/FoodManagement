@@ -174,6 +174,25 @@ def donation():
 
 
 
+
+@app.route('/prediction')
+def prediction():
+
+    if request.method == 'POST':
+        
+        value1 = request.form['value1']
+        value2 = request.form['value2']
+        value3 = request.form['value3']
+        value4 = request.form['value4']
+        # some operations
+        print(value1)
+
+        return render_template('restaurant-data-form.html',prediction={"data":"some_prediction"})
+
+
+    return render_template('restaurant-data-form.html')
+
+
 @app.route('/donation-history')
 def donationHistory():
 
