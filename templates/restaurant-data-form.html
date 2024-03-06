@@ -1,40 +1,101 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="w-full flex bg-[#E3E3E1] relative justify-center min-h-[90vh]">
-        
-        <div class="w-1/2 p-8">
-            <h1 class="font-bold text-2xl mb-4">Enter Data:</h1>
+<div class="w-full flex bg-[#E3E3E1] relative justify-center min-h-[90vh]">
+    
+    <div class="w-1/2 p-8">
+        <h1 class="font-bold text-2xl mb-4">Enter Data:</h1>
 
-            <form class="space-y-4" method="post" enctype="multipart/form-data">
-                <div>
-                    <label for="mealName" class="block text-sm font-medium text-gray-700">Value 1:</label>
-                    <input type="text" id="value1" name="value1" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label for="value2" class="block text-sm font-medium text-gray-700">Value 2:</label>
-                    <input type="number" id="value2" name="value2" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
-                </div>
-                <div>
-                    <label for="value3" class="block text-sm font-medium text-gray-700">Value 3:</label>
-                    <input type="text" id="value3" name="value3" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
-                </div>
-                
-                <div>
-                    <label for="value4" class="block text-sm font-medium text-gray-700">VALUE 4:</label>
-                    <input type="text" id="value4" name="value4" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
-                </div>
-                
-                
-                <div class="flex justify-between items-center mt-4">
-                   
-                    <button type="submit"  class="mt-4 px-6 bg-green-500 text-white p-2 rounded-md">Submit</button>
-                </div>
-            </form>
-        </div>
+        <form class="space-y-4" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="TypeOfFood" class="block text-sm font-medium text-gray-700">Type of Food:</label>
+                <select id="TypeOfFood" name="TypeOfFood" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Meat">Meat</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Fruits">Fruits</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="NumberOfGuests" class="block text-sm font-medium text-gray-700">Number of Guests:</label>
+                <input type="number" id="NumberOfGuests" name="NumberOfGuests" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="EventType" class="block text-sm font-medium text-gray-700">Event Type:</label>
+                <select id="EventType" name="EventType" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Corporate">Corporate</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Wedding">Wedding</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="QuantityOfFood" class="block text-sm font-medium text-gray-700">Quantity of Food:</label>
+                <input type="number" id="QuantityOfFood" name="QuantityOfFood" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+                <label for="StorageConditions" class="block text-sm font-medium text-gray-700">Storage Conditions:</label>
+                <select id="StorageConditions" name="StorageConditions" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Refrigerated">Refrigerated</option>
+                    <option value="Frozen">Frozen</option>
+                    <option value="Room Temperature">Room Temperature</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="PurchaseHistory" class="block text-sm font-medium text-gray-700">Purchase History:</label>
+                <select id="PurchaseHistory" name="PurchaseHistory" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Regular">Regular</option>
+                    <option value="First-time">First-time</option>
+                    <option value="Occasional">Occasional</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="Seasonality" class="block text-sm font-medium text-gray-700">Seasonality:</label>
+                <select id="Seasonality" name="Seasonality" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="All Seasons">All Seasons</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Winter">Winter</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="PreparationMethod" class="block text-sm font-medium text-gray-700">Preparation Method:</label>
+                <select id="PreparationMethod" name="PreparationMethod" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Buffet">Buffet</option>
+                    <option value="Finger Food">Finger Food</option>
+                    <option value="Plated">Plated</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="GeographicalLocation" class="block text-sm font-medium text-gray-700">Geographical Location:</label>
+                <select id="GeographicalLocation" name="GeographicalLocation" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Urban">Urban</option>
+                    <option value="Suburban">Suburban</option>
+                    <option value="Rural">Rural</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            <div>
+                <label for="Pricing" class="block text-sm font-medium text-gray-700">Pricing:</label>
+                <select id="Pricing" name="Pricing" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required>
+                    <option value="Low">Low</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="High">High</option>
+                    <!-- Add more options based on your dataset -->
+                </select>
+            </div>
+            
+            <div class="flex justify-between items-center mt-4">
+                <button type="submit" class="mt-4 px-6 bg-green-500 text-white p-2 rounded-md">Submit</button>
+            </div>
+        </form>
     </div>
+</div>
 
-    <script>
-        
-    </script>
+<script>
+    
+</script>
 {% endblock %}

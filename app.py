@@ -3,6 +3,11 @@ import os
 import random
 import utils
 from datetime import datetime
+import numpy as np
+import pandas as pd
+import joblib
+from utils import *
+
 
 app = Flask(__name__)
 
@@ -175,20 +180,47 @@ def donation():
 
 
 
-@app.route('/prediction')
+@app.route('/prediction', methods=['GET', 'POST'])
 def prediction():
 
     if request.method == 'POST':
+        # Retrieve form data
+        type_of_food = request.form['TypeOfFood']
+        number_of_guests = request.form['NumberOfGuests']
+        event_type = request.form['EventType']
+        quantity_of_food = request.form['QuantityOfFood']
+        storage_conditions = request.form['StorageConditions']
+        purchase_history = request.form['PurchaseHistory']
+        seasonality = request.form['Seasonality']
+        preparation_method = request.form['PreparationMethod']
+        geographical_location = request.form['GeographicalLocation']
+        pricing = request.form['Pricing']
+
+        # Create a DataFrame with the input data
+        input_data = pd.DataFrame({
+            'Type of Food': [type_of_food],
+            'NumberofGuests': [number_of_guests],
+            'Event Type': [event_type],
+            'QuantityofFood': [quantity_of_food],
+            'Storage Conditions': [storage_conditions],
+            'Purchase History': [purchase_history],
+            'Seasonality': [seasonality],
+            'Preparation Method': [preparation_method],
+            'Geographical Location': [geographical_location],
+            'Pricing': [pricing]
+        })
+
+        model = joblib.load('./models/model.joblib')
+
+        # # # Make a prediction
+        prediction = model(input_data) #model.predict(input_processed)
+
+        # # Format prediction text
+        prediction_text = f"Predicted Wastage Food Amount: {prediction:.2f}"
+
+        print(prediction_text)
         
-        value1 = request.form['value1']
-        value2 = request.form['value2']
-        value3 = request.form['value3']
-        value4 = request.form['value4']
-        # some operations
-        print(value1)
-
-        return render_template('restaurant-data-form.html',prediction={"data":"some_prediction"})
-
+        return render_template('restaurant-data-form.html', prediction={"data": prediction_text})
 
     return render_template('restaurant-data-form.html')
 
@@ -243,4 +275,6 @@ def adminDashboard():
 
 
 if __name__ == '__main__':
+    preprocessor = joblib.load('./models/food_wastage_preprocessor_updated.joblib')
+    model = joblib.load('./models/model.joblib')
     app.run(debug=True)

@@ -1,12 +1,20 @@
 import json 
 import os
 from datetime import datetime
+import numpy as np
+import pandas as pd
+import joblib
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 roles = {
         'Restaurant Owner': 'single_or_restaurant',
         'Asharam/NGO personnel': 'ngo',
         'Admin': 'admin'
     }
+
+def preprocess_data():
+    return
 
 def authenticate(role, email, password):
 
@@ -142,6 +150,15 @@ def getDonations():
 
     return getHistoryData()
 
+
+def process_data(data):
+
+    guest_count = float(data.NumberofGuests)
+    quantity = float(data.QuantityofFood)
+
+    wastage_percent = max(((quantity/guest_count)-0.75)*guest_count, 0)
+
+    return wastage_percent
 
 
 
