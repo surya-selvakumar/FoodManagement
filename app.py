@@ -275,6 +275,6 @@ def adminDashboard():
 
 
 if __name__ == '__main__':
-    preprocessor = joblib.load('./models/food_wastage_preprocessor_updated.joblib')
+    preprocessor = joblib.load('./models/preprocess.joblib')
     model = joblib.load('./models/model.joblib')
     app.run(debug=True)
