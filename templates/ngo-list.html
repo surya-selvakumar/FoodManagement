@@ -42,20 +42,22 @@
         console.log(ngos);
 
         function showInfo(index) {
+            console.log(index);
             const ngoData = ngos[index - 1];
             var moreInfoContainer = document.getElementById('more-info-container');
             moreInfoContainer.innerHTML = `
             <div class="max-w-md mx-auto p-4">
                 <div class="flex items-center gap-4">
                     <img src="${ngoData.ngo_logo}" alt="NGO Logo" class="h-12 w-12">
-                    <h2 class="text-2xl font-bold mb-4">${ngoData.ngo_name}</h2>
+                    <h2 class="text-2xl font-bold mb-4">${ngoData.registered_name}</h2>
                 </div>
                 <div class="flex flex-col gap-y-2 flex-wrap mb-4 mt-4">
-                    <p class="mt-1"><strong>NGO Description:</strong> ${ngoData.ngo_description}</p>
-                    <p class="mt-4"><strong>Location:</strong> ${ngoData.location}</p>
-                    <p><strong>Phone Number:</strong> ${ngoData.phone}</p>
-                    <p><strong>Date Registered:</strong> ${ngoData.date_registered}</p>
-                    <p><strong>Number of People:</strong> ${ngoData.people_in_ngo}</p>
+                    <p class="mt-1"><strong>Certification Number:</strong> ${ngoData.certification}</p>
+                    <p class="mt-1"><strong>NGO Description:</strong> ${ngoData.description}</p>
+                    <p class="mt-4"><strong>Location:</strong> ${ngoData.address}</p>
+                    
+                    <p><strong>Date Registered:</strong> ${ngoData.date}</p>
+                    <p><strong>Number of People:</strong> ${ngoData.people}</p>
                    
                 </div>
             </div>

@@ -246,6 +246,7 @@ def ngoList():
 def ngoDashboard():
     donations = utils.getDonations()
     length = len(donations)
+    print(donations)
     return render_template('ngo-dashboard.html',donations=donations,length=length)
 
 
@@ -275,6 +276,6 @@ def adminDashboard():
 
 
 if __name__ == '__main__':
-    preprocessor = joblib.load('./models/food_wastage_preprocessor_updated.joblib')
+    preprocessor = joblib.load('./models/preprocess.joblib')
     model = joblib.load('./models/model.joblib')
     app.run(debug=True)
