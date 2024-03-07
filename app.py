@@ -246,6 +246,7 @@ def ngoList():
 def ngoDashboard():
     donations = utils.getDonations()
     length = len(donations)
+    print(donations)
     return render_template('ngo-dashboard.html',donations=donations,length=length)
 
 

@@ -92,6 +92,14 @@
                 <button type="submit" class="mt-4 px-6 bg-green-500 text-white p-2 rounded-md">Submit</button>
             </div>
         </form>
+
+        {% if prediction %}
+        <!-- Render content when prediction is present -->
+        <p class="mt-4 text-xl font-semibold text-center">Prediction: {{ prediction.data }}</p>
+        {% else %}
+        <!-- Render content when prediction is not present -->
+        <p class="mt-4 text-xl font-semibold text-center">No prediction available</p>
+        {% endif %}
     </div>
 </div>
 
