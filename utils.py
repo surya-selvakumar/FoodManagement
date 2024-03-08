@@ -6,6 +6,13 @@ import pandas as pd
 import joblib
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from email.message import EmailMessage
+import ssl
+import smtplib
+import time
+from dotenv import load_dotenv
+
+
 
 roles = {
         'Restaurant Owner': 'single_or_restaurant',
@@ -52,56 +59,132 @@ def save_login_data(role, email, password):
         json.dump(data, jf)
 
 
-def save_details(role, details, donation=False):
+def save_details(role, emailAdd, details, donation=False):
 
     data = load_data()
 
     if donation:
-        data["donationData"].append(details)
+        data["donationData"][emailAdd] = details
 
     elif roles[role]=='single_or_restaurant':
-        data["supplierData"].append(details)
+        data["supplierData"][emailAdd] = details
 
     elif roles[role]=='ngo':
-        data["ngoData"].append(details)
+        data["ngoData"][emailAdd] = details
 
 
     with open('data.json', 'w') as jf:
         json.dump(data, jf)
 
 
+
+def accept_email(donation_idx, ngo_email):
+
+    load_dotenv()
+    print("*************Send Email Function************")
+
+    print("NGO EMAIL", ngo_email)
+    
+    data = load_data()
+    donation_data = data["donationData"]
+    ngo_data = data['ngoData']
+
+    donor_email = list(donation_data.keys())[donation_idx]
+    print("DONOR: ", donor_email)
+    data["donationData"][donor_email]['status'] = f"Accepted by {ngo_data[ngo_email]['organization_name']}"
+
+    with open('data.json', 'w') as jf:
+        json.dump(data, jf)
+
+    mail_sender = os.environ.get('SENDER_EMAIL')
+    mail_password = os.environ.get('PASSWORD')
+    mail_receiver = donor_email
+    subject = f'Donation Accepted'
+    text = f"Donation Accepted by {ngo_data[ngo_email]['organization_name']}. Thankyou for helping people"
+
+    em = EmailMessage()
+    em['From'] = mail_sender
+    em['To'] = mail_receiver
+    em['Subject'] = subject  
+    em.set_content(text)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(mail_sender, mail_password)
+        smtp.send_message(em)
+
+
+def format_donation_email(donation_data, target_ngo):
+    
+    email_content = f"Dear {target_ngo['organization_name']},\n\n"
+    email_content += "A new donation has been received in the portal. Here are the details:\n\n"
+
+    email_content += f"Role: {donation_data['role']}\n"
+    email_content += f"Donor Name: {donation_data['taker_name']}\n"
+    email_content += f"Meal Name: {donation_data['mealName']}\n"
+    email_content += f"Quantity: {donation_data['mealQuantity']}\n"
+    email_content += f"Packaging: {donation_data['mealPackaging']}\n"
+    email_content += f"Expiry Date: {donation_data['mealExpiry']}\n"
+    email_content += f"Reason for Donation: {donation_data['donationReason']}\n"
+    email_content += f"Meal Description: {donation_data['mealDescription']}\n"
+    email_content += f"Address: {donation_data['donationAddress']}\n"
+    email_content += f"Date: {donation_data['date']}\n"
+    email_content += f"Time: {donation_data['time']}\n"
+    email_content += f"Status: {donation_data['status']}\n"
+    email_content += "\nWe encourage you to review this donation and take necessary actions.\n\n"
+    email_content += "Thank you for your continued support and cooperation.\n"
+
+    return email_content
+
+
+
+def donation_received_email(donation_data):
+
+    print("*************DONATION RECEIVED************")
+    data = load_data()
+    ngo_data = data['ngoData']
+
+    ngo_emails = list(ngo_data.keys())
+    
+
+    mail_sender = os.environ.get('SENDER_EMAIL')
+    mail_password = os.environ.get('PASSWORD')
+    subject = f'Donation Received'
+
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(mail_sender, mail_password)
+
+        for i, mail_receiver in enumerate(ngo_emails):
+
+            target_ngo = ngo_data[mail_receiver]
+    
+            em = EmailMessage()
+            em['From'] = mail_sender
+            em['To'] = mail_receiver
+            em['Subject'] = subject  
+
+            text = format_donation_email(donation_data, target_ngo)
+            em.set_content(text)
+            smtp.send_message(em)
+
+            time.sleep(5)
+
+
     
 
 
 def getHistoryData():
-    # return [
-    #     {
-    #         'img': './static/assets/profile.webp',
-    #         'taker_name': 'NGO A',
-    #         'meal_name': 'Rice and Daal',
-    #         'meal_amount': '1 Kg',
-    #         'date_of_donation': '2024-02-01',
-    #         'time_of_donation': '5:00 PM',
-    #     }
-    # ] 
-    donationData = load_data()["donationData"]
+   
+    donationData = list(load_data()["donationData"].values())
 
     return donationData  
 
 
 
 def getTodaysDonation():
-    # return [
-    #     {
-    #         'name':'Rice and Daal',
-    #         'quantity':'1Kg Rice ,2L Daal',
-    #         'date':'01-02-2024',
-    #         'time':'5:00 PM',
-    #         'status':'Pending',
-    #         'img':'./static/assets/food.jpg'
-    #     }
-
-    # ]
 
     donationData = getHistoryData()
     todayData = []
@@ -116,37 +199,15 @@ def getTodaysDonation():
 
 
 def getNGOS():
-    # return [
-    #     {
-    #         'ngo_logo': './static/assets/ngo.png',
-    #         'phone': '8989232234',
-    #         'ngo_name': 'NGO A',
-    #         'location': 'City A, Country X',
-    #         'date_registered': '2024-01-15',
-    #         'ngo_description': 'NGO A is committed to providing support to local communities...',
-    #         'people_in_ngo': 50,
-    #     }
-    # ]
-    ngoData = load_data()['ngoData']
+
+    ngoData = list(load_data()['ngoData'].values())
 
     return ngoData
 
 
 
 def getDonations():
-    # return [
-    #     {
-    #         'donation_from':'Swati Rawat',
-    #         'item':'Kadhai Paneer',
-    #         'quantity':'500gm',
-    #         'date':'29-01-2024',
-    #         'time':'6:00 PM',
-    #         'status':'not accepted',
-    #         'img':'./static/assets/food.jpg',
-    #         'location':'Near School, Lane No. 3',
-    #         'phone':'8434212312'
-    #     }
-    # ]
+    
 
     return getHistoryData()
 
@@ -163,38 +224,15 @@ def process_data(data):
 
 
 def getNGODonationsHistory():
-    # return [
-    #     {
-    #         'donation_from':'Swati Rawat',
-    #         'item':'Kadhai Paneer',
-    #         'quantity':'500gm',
-    #         'date':'29-01-2024',
-    #         'time':'6:00 PM',
-    #         'img':'./static/assets/food.jpg',
-    #         'location':'Near School, Lane No. 3',
-    #         'phone':'8434212312'
-    #     }
-    # ]
+    
 
     return getHistoryData()
 
 
 
 def getSuppliers():
-    # return [
-    #     {
-    #         'img': './static/assets/user.png',
-    #         'name': 'Swati Tiwari',
-    #         'location': 'City A, Country X',
-    #         'restaurant_name': 'TAJ Hotel',
-    #         'restaurant_description': 'Restaurant A is committed to providing support to local communities...',
-    #         'phone': 897723121,
-    #         'people':'13',
-    #         'date':'23-23-12',
-    #         'time':'9:00pm',
-    #     } 
-    # ]
-    supplierData = load_data()['supplierData']
+    
+    supplierData = list(load_data()['supplierData'].values())
     
     return supplierData
 
@@ -202,25 +240,11 @@ def getSuppliers():
 
 
 def getAdminDonations():
-    # return [
-    #     {
-    #         'donation_from':'Swati Rawat',
-    #         'accepted_by':'NGO Children Health',
-    #         'status':'accepted',
-    #         'item':'Kadhai Paneer',
-    #         'quantity':'500gm',
-    #         'date':'29-01-2024',
-    #         'time':'6:00 PM',
-    #         'status':'not accepted',
-    #         'img':'./static/assets/food.jpg',
-    #         'location':'Near School, Lane No. 3',
-    #         'phone':'8434212312'
-    #     }
-    # ]
+    
+    # donations = getHistoryData()
+    # adminDonations = []
 
-    donations = getHistoryData()
-    adminDonations = []
-
-    for each_donation in donations:
-        if each_donation['role']=='Admin':
-            adminDonations.append(each_donation)
+    # for each_donation in donations:
+    #     if each_donation['role']=='Admin':
+    #         adminDonations.append(each_donation)
+    return getHistoryData()

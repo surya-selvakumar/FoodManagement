@@ -61,19 +61,43 @@
                         <p><strong>Date:</strong> ${donationData.date}</p>
                         <p><strong>Time:</strong> ${donationData.time}</p>
                         <p><strong>Status:</strong> ${donationData.status}</p>
-                        <><strong>Location:</strong> ${donationData.donationAddress}</
+                        <p><strong>Location:</strong> ${donationData.donationAddress}</p>
                     </div>
                     
                 </div>
                 <img src="${donationData.mealImage}" alt="Donation Image" class="w-full h-auto my-4">
-                <button class="mt-4 bg-green-500 rounded-lg px-4 py-2 text-lg text-white border-none hover:bg-green-600 w-fit" onClick="acceptDonation(${index-1})">Accept Donation</button>
+                ${donationData.status === 'Pending' ? `<button class="mt-4 bg-green-500 rounded-lg px-4 py-2 text-lg text-white border-none hover:bg-green-600 w-fit" onClick="acceptDonation(${index-1})">Accept Donation</button>` : ''}
             </div>
         `;
         }
 
-        function acceptDonation(index){
-            console.log(index)
+        function acceptDonation(index) {
+            
+            const donationId = index; 
+
+            const url = '/ngo-dashboard';
+
+            const data = { 'id': donationId };
+
+            fetch(url, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify(data), 
+            })
+            .then(response => response.json()) 
+            .then(data => {
+                // Handle the response data
+                console.log('Success:', data);
+                alert("Donation accepted successfully!");
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert("An error occurred while accepting the donation.");
+            });
         }
+
        
     </script>
 {% endblock %}

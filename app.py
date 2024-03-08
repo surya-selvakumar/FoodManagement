@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request,jsonify,redirect,url_for
+from flask import Flask, render_template,request,jsonify,redirect,url_for, session
 import os
 import random
 import utils
@@ -7,9 +7,13 @@ import numpy as np
 import pandas as pd
 import joblib
 from utils import *
+from dotenv import load_dotenv, set_key
+
+load_dotenv()
 
 
 app = Flask(__name__)
+app.secret_key = 'secret_key'
 
 curr_date = datetime.now().strftime("%d-%m-%Y")
 userRole=""
@@ -33,11 +37,15 @@ def login():
     if request.method == 'POST':
         global role
 
+
         name = "name"
         email = request.form['email']
         password = request.form['password']
         role = request.form['role']
         
+        session['LOGIN_EMAIL'] = email
+
+
         if utils.authenticate(role, email, password):
             userRole=role
             # Get user name in 'name'
@@ -89,7 +97,7 @@ def restaurantRegister():
 
         print(f"**************{role}*************")
 
-        utils.save_details(role, details)
+        utils.save_details(role, email, details)
 
         print('user'+email+ "password" +password +'confirmPassword' )
 
@@ -121,7 +129,7 @@ def ngoRegister():
              "date":curr_date, "registered_name":name, "organization_name": organization_name, "address":address, "people":people, "certification":certification, "description":description
         }
 
-        utils.save_details(role, details)
+        utils.save_details(role, email, details)
         
 
         return redirect(url_for('login'))
@@ -136,6 +144,7 @@ def donation():
     donation_data = utils.getTodaysDonation()
 
     if request.method == 'POST':
+        emailAdd = request.form['emailAdd']
         mealName = request.form['mealName']
         mealQuantity = request.form['mealQuantity']
         mealImage = request.files['mealImage']
@@ -169,10 +178,14 @@ def donation():
             "longitude": longitude,
             "date": curr_date,
             "time": curr_time,
-            "status": "Pending"
+            "status": "Pending",
+            "emailAdd": emailAdd
         }   
 
-        utils.save_details(role, donation_data, donation=True)
+        utils.save_details(role, emailAdd, donation_data, donation=True)
+        utils.donation_received_email(donation_data)
+
+
 
 
     return render_template('donation.html',donation_data=donation_data)
@@ -242,11 +255,21 @@ def ngoList():
 
 
 
-@app.route("/ngo-dashboard")
+@app.route("/ngo-dashboard", methods=['GET', 'POST'])
 def ngoDashboard():
     donations = utils.getDonations()
     length = len(donations)
     print(donations)
+
+    if request.method=='POST':
+        print("POST METHOD GG")
+        data = request.get_json()  # Use get_json() to ensure it tries to parse as JSON
+        print("Received data:", data)
+        donation_idx = data['id']
+
+        utils.accept_email(donation_idx, session['LOGIN_EMAIL'])
+
+        return jsonify(1)
     return render_template('ngo-dashboard.html',donations=donations,length=length)
 
 
@@ -271,6 +294,7 @@ def adminDashboard():
     length = 0
     if donations:
         length = len(donations)
+        
     return render_template('admin-dashboard.html',donations=donations,length=length)
 
 
