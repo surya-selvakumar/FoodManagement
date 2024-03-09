@@ -77,6 +77,30 @@ def save_details(role, emailAdd, details, donation=False):
         json.dump(data, jf)
 
 
+def format_accept_email(donation_data, ngo_data, ngo_email):
+    
+    email_content = f"Dear Contributor,\n\n"
+    email_content += f"Your Donation is accepted by {ngo_data['organization_name']}. Here are the details of your donation and the acceptor:\n\n"
+
+    email_content += f"Donation Details: \n"
+    email_content += f"Meal Name: {donation_data['mealName']}\n"
+    email_content += f"Quantity: {donation_data['mealQuantity']}\n"
+    email_content += f"Expiry Date: {donation_data['mealExpiry']}\n\n"
+
+
+    email_content += f"Accepted NGO Details: \n"
+    email_content += f"Organization Name: {ngo_data['organization_name']}\n"
+    email_content += f"Adress: {ngo_data['address']}\n"
+    email_content += f"Certification: {ngo_data['certification']}\n"
+    email_content += f"Contact Person: {ngo_data['registered_name']}\n"
+    email_content += f"Contact Email: {ngo_email}"
+
+    email_content += "\nWe sincerely thank you for making a contribution .\n\n"
+    email_content += "We also encourage you to do more donations in the future.\n"
+
+    return email_content
+
+
 
 def accept_email(donation_idx, ngo_email):
 
@@ -100,7 +124,7 @@ def accept_email(donation_idx, ngo_email):
     mail_password = os.environ.get('PASSWORD')
     mail_receiver = donor_email
     subject = f'Donation Accepted'
-    text = f"Donation Accepted by {ngo_data[ngo_email]['organization_name']}. Thankyou for helping people"
+    text = format_accept_email(donation_data[donor_email], ngo_data[ngo_email], ngo_email)
 
     em = EmailMessage()
     em['From'] = mail_sender
